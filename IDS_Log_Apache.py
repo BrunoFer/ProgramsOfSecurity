@@ -10,7 +10,7 @@ ip_data_hora = re.findall(r'([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}) - -
 ips_encontrados = []
 qtde_vezes_ip = []
 primeiro_acesso = []
-k=0
+
 for i in ip_data_hora:
 	# Elimina as linhas escritas pelo próprio servidor dentro do arquivo de log.
 	if (i[0] != "127.0.0.1"):
