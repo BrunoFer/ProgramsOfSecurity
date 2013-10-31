@@ -17,7 +17,7 @@ for i in ip_data_hora:
 	# Elimina as linhas escritas pelo próprio servidor dentro do arquivo de log.
 	if (i[0] != "127.0.0.1"):
 		# Verifica se o IP na linha do arquivo já foi lido e está armazenado no vetor dos IP's encontrados
-		if (ips_encontrados.__contains__(i[0])):
+		if (i[0] in ips_encontrados):
 			indice = ips_encontrados.index(i[0])
 			'''
 			Só sera incrementado a quantidade de vezes que o IP foi encontrado se o novo acesso tiver acontecido na mesma data, 
@@ -38,5 +38,6 @@ de um minuto houver 50 ou mais acessos realizados pelo mesmo IP, o mesmo será b
 '''
 for i in ips_encontrados:
 	if (qtde_vezes_ip[ips_encontrados.index(i)]>=50):
+		print "IP {0} bloqueado! Suposto ataque DoS.".format(i)
 		#print "iptables -I INPUT -s {0} -j DROP".format(i)
 		os.system("iptables -I INPUT -s {0} -j DROP".format(i));
