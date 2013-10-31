@@ -20,10 +20,10 @@ for i in conteudo:
 	Pega a linha do arquivo do syslog e verifica se a linha possui a palavra ssh2 e a expressão
 	"Failed password" que indicam respectivamente o serviço ssh e a falha das credenciais para o serviço. 
 	'''
-	if (i.__contains__("Failed password") and aux[len(aux)-1]=="ssh2"):
+	if ("Failed password" in i and aux[len(aux)-1]=="ssh2"):
 		#print i
 		# Verifica se o ip da linha já está na variável de IP's encontrados ou se ele está bloqueado
-		if (ips_encontrados.__contains__(aux[10]) and not ips_bloqueados.__contains__(aux[10])):
+		if (aux[10] in ips_encontrados and not aux[10] in ips_bloqueados):
 			indice = ips_encontrados.index(aux[10])
 			hora = aux[2].split(":")
 			# Verifica se o dia e o mês são os mesmos para o primeiro registro encontrado
@@ -32,10 +32,10 @@ for i in conteudo:
 				Nesta parte do código, o programa verifica a hora da tentativa. Se a hora for diferente, o aplicativo já verifica a 
 				quantidade de tentativas falhas e bloqueia o IP no firewall. Se a hora for igual ao do registro analisado, o programa
 				acrescenta mais uma tentativa e também verifica o número de tentativas. Nos dois casos, o ip que ultrapassa o limite 
-				estabelecido de no máximo 5 tentativas em uma hora vai para uma variável de IP's bloqueados.
+				estabelecido de no máximo 3 tentativas em uma hora vai para uma variável de IP's bloqueados.
 				'''
 				if (primeiro_acesso_hora[indice][2]!=hora[0]):
-					if (num_vezes_hora[indice]>=5):
+					if (num_vezes_hora[indice]>=3):
 						print "Bloqueia ip ",aux[10]
 						#os.system("iptables -I INPUT -s {0} -j DROP".format(aux[10]));
 						ips_bloqueados.append(aux[10])
@@ -46,7 +46,7 @@ for i in conteudo:
 						num_vezes_hora[indice]=1
 				elif (primeiro_acesso_hora[indice][2]==hora[0]):
 					num_vezes_hora[ips_encontrados.index(aux[10])] += 1
-					if (num_vezes_hora[indice]>=5):
+					if (num_vezes_hora[indice]>=3):
 						print "Bloqueia ip ",aux[10]
 						#os.system("iptables -I INPUT -s {0} -j DROP".format(aux[10]));
 						ips_bloqueados.append(aux[10])
